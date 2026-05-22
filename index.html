@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Jhulian's Artistic Portfolio – A journey through music, guitar, and piano. Explore the creative world of a passionate musician." />
+  <title>Jhulian | Artistic Music Portfolio</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ⏳ Preloader -->
+  <div class="preloader" id="preloader">
+    <div class="preloader-content">
+      <svg class="clef-svg" viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 50,180 C 20,180 20,150 50,150 C 80,150 80,120 50,120 C 30,120 30,100 50,100 C 60,100 70,90 70,70 C 70,40 40,20 50,50 C 60,80 50,200 50,200" fill="none" stroke="var(--accent-gold)" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <div class="loading-text">Tuning instruments...</div>
+    </div>
+  </div>
+
+  <!-- 🎹 Interactive Piano Keyboard -->
+  <div class="interactive-piano" id="interactive-piano" aria-label="Interactive piano keyboard">
+    <div class="piano-hint" id="piano-hint">♪ Touch me</div>
+    <div class="piano-note-display" id="piano-note-display"></div>
+    <div class="piano-keys" id="piano-keys"></div>
+  </div>
+
+  <!-- Custom Cursor -->
+  <div class="custom-cursor" id="custom-cursor"></div>
+  <div class="custom-cursor-follower" id="custom-cursor-follower"></div>
+
+  <!-- ═══════════════════════════════════════════
+       NAV
+  ═══════════════════════════════════════════ -->
+  <nav class="nav" id="nav">
+    <div class="nav-logo">
+      <span class="nav-logo-icon">♪</span>
+      <span class="nav-logo-text">Jhulian</span>
+    </div>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#about" class="nav-link">About</a></li>
+      <li><a href="#background" class="nav-link">Artistry</a></li>
+      <li><a href="#video" class="nav-link">Performance</a></li>
+      <li><a href="#gallery" class="nav-link">Gallery</a></li>
+      <li><a href="#references" class="nav-link">Influences</a></li>
+    </ul>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════
+       HERO SECTION
+  ═══════════════════════════════════════════ -->
+  <section class="hero" id="hero">
+    <!-- Animated background particles -->
+    <div class="hero-particles" id="hero-particles"></div>
+
+    <!-- Guitar SVG parallax layer -->
+    <div class="hero-guitar-bg" id="hero-guitar-bg">
+      <svg class="guitar-svg" viewBox="0 0 300 800" xmlns="http://www.w3.org/2000/svg">
+        <!-- Guitar body -->
+        <ellipse cx="150" cy="600" rx="100" ry="130" fill="none" stroke="rgba(245,200,66,0.15)" stroke-width="2"/>
+        <ellipse cx="150" cy="600" rx="75" ry="100" fill="none" stroke="rgba(245,200,66,0.08)" stroke-width="1"/>
+        <!-- Guitar waist -->
+        <path d="M 80 520 Q 50 550 80 580 Q 50 610 80 640" fill="none" stroke="rgba(245,200,66,0.12)" stroke-width="2"/>
+        <path d="M 220 520 Q 250 550 220 580 Q 250 610 220 640" fill="none" stroke="rgba(245,200,66,0.12)" stroke-width="2"/>
+        <!-- Sound hole -->
+        <circle cx="150" cy="590" r="35" fill="none" stroke="rgba(245,200,66,0.2)" stroke-width="1.5"/>
+        <!-- Neck -->
+        <rect x="142" y="150" width="16" height="370" rx="8" fill="none" stroke="rgba(245,200,66,0.15)" stroke-width="1.5"/>
+        <!-- Headstock -->
+        <rect x="135" y="100" width="30" height="60" rx="6" fill="none" stroke="rgba(245,200,66,0.2)" stroke-width="1.5"/>
+        <!-- Strings -->
+        <line x1="145" y1="120" x2="145" y2="560" stroke="rgba(245,200,66,0.25)" stroke-width="0.8" class="guitar-string"/>
+        <line x1="148" y1="120" x2="148" y2="560" stroke="rgba(245,200,66,0.2)" stroke-width="0.7" class="guitar-string"/>
+        <line x1="151" y1="120" x2="151" y2="560" stroke="rgba(245,200,66,0.2)" stroke-width="0.7" class="guitar-string"/>
+        <line x1="154" y1="120" x2="154" y2="560" stroke="rgba(245,200,66,0.2)" stroke-width="0.7" class="guitar-string"/>
+        <line x1="157" y1="120" x2="157" y2="560" stroke="rgba(245,200,66,0.15)" stroke-width="0.6" class="guitar-string"/>
+        <line x1="160" y1="120" x2="160" y2="560" stroke="rgba(245,200,66,0.15)" stroke-width="0.6" class="guitar-string"/>
+        <!-- Frets -->
+        <line x1="142" y1="200" x2="158" y2="200" stroke="rgba(245,200,66,0.3)" stroke-width="1"/>
+        <line x1="142" y1="230" x2="158" y2="230" stroke="rgba(245,200,66,0.3)" stroke-width="1"/>
+        <line x1="142" y1="260" x2="158" y2="260" stroke="rgba(245,200,66,0.3)" stroke-width="1"/>
+        <line x1="142" y1="290" x2="158" y2="290" stroke="rgba(245,200,66,0.25)" stroke-width="1"/>
+        <line x1="142" y1="320" x2="158" y2="320" stroke="rgba(245,200,66,0.25)" stroke-width="1"/>
+        <line x1="142" y1="350" x2="158" y2="350" stroke="rgba(245,200,66,0.2)" stroke-width="1"/>
+        <line x1="142" y1="380" x2="158" y2="380" stroke="rgba(245,200,66,0.2)" stroke-width="1"/>
+        <line x1="142" y1="410" x2="158" y2="410" stroke="rgba(245,200,66,0.15)" stroke-width="1"/>
+        <line x1="142" y1="440" x2="158" y2="440" stroke="rgba(245,200,66,0.15)" stroke-width="1"/>
+      </svg>
+    </div>
+
+    <!-- Piano keys parallax layer -->
+    <div class="hero-piano-keys" id="hero-piano-keys">
+      <div class="piano-key white"></div>
+      <div class="piano-key black"></div>
+      <div class="piano-key white"></div>
+      <div class="piano-key white"></div>
+      <div class="piano-key black"></div>
+      <div class="piano-key white"></div>
+      <div class="piano-key black"></div>
+      <div class="piano-key white"></div>
+      <div class="piano-key white"></div>
+      <div class="piano-key black"></div>
+      <div class="piano-key white"></div>
+      <div class="piano-key white"></div>
+      <div class="piano-key black"></div>
+      <div class="piano-key white"></div>
+    </div>
+
+    <!-- Audio wave visualizer -->
+    <div class="hero-wave" id="hero-wave">
+      <canvas id="wave-canvas"></canvas>
+    </div>
+
+    <!-- Main hero content -->
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="eyebrow-line"></span>
+        <span class="eyebrow-text">Artistic Portfolio 2025</span>
+        <span class="eyebrow-line"></span>
+      </div>
+      <h1 class="hero-title" id="hero-title">
+        <span class="hero-name-line">Jhulian</span>
+        <span class="hero-subtitle-line">Musician<span class="hero-dot">.</span></span>
+      </h1>
+      <p class="hero-tagline">Guitar · Piano · Soul</p>
+      <div class="hero-instruments">
+        <div class="instrument-badge" id="badge-guitar">
+          <span class="instrument-icon">🎸</span>
+          <span>Guitar</span>
+        </div>
+        <div class="instrument-divider"></div>
+        <div class="instrument-badge" id="badge-piano">
+          <span class="instrument-icon">🎹</span>
+          <span>Piano</span>
+        </div>
+      </div>
+      <a href="#about" class="hero-scroll-cta" id="hero-scroll-cta">
+        <span>Discover</span>
+        <div class="scroll-arrow">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </div>
+      </a>
+    </div>
+
+    <!-- Scroll progress indicator -->
+    <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 1 – PERSONAL INFO
+  ═══════════════════════════════════════════ -->
+  <section class="section about-section" id="about">
+    <div class="section-inner">
+      <div class="section-label reveal-from-left">01 / Personal Information</div>
+      <h2 class="section-title reveal-from-left">
+        Who I <em>Am</em>
+      </h2>
+
+      <div class="about-grid">
+        <div class="about-info-card reveal-from-left">
+          <div class="info-card-header">
+            <div class="info-card-glyph">♩</div>
+            <h3>Identity</h3>
+          </div>
+          <div class="info-rows">
+            <div class="info-row">
+              <span class="info-label">Full Name</span>
+              <span class="info-value">Jhulian</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Grade</span>
+              <span class="info-value"><!-- ADD YOUR GRADE --> 10th</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Age</span>
+              <span class="info-value"><!-- ADD YOUR AGE --> 15</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">School</span>
+              <span class="info-value">Arts Showcase 2025</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-intro-card reveal-from-right">
+          <div class="intro-quote-mark">"</div>
+          <p class="about-intro-text">
+            Hello! My name is Jhulian, and music has been at the center of my life for as long as I can remember.
+            I am a passionate musician who expresses emotion and creativity through two beautiful instruments —
+            the <strong>guitar</strong> and the <strong>piano</strong>. For me, music is not just an art;
+            it is a language that speaks directly to the soul.
+          </p>
+          <p class="about-intro-text">
+            Every chord I play and every melody I compose is a reflection of who I am —
+            curious, creative, and deeply in love with the art of sound.
+          </p>
+          <div class="intro-signature">— Jhulian</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decorative musical notes floating -->
+    <div class="floating-notes" aria-hidden="true">
+      <span class="note" style="--i:1">♪</span>
+      <span class="note" style="--i:2">♩</span>
+      <span class="note" style="--i:3">♫</span>
+      <span class="note" style="--i:4">♬</span>
+      <span class="note" style="--i:5">♭</span>
+      <span class="note" style="--i:6">♮</span>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 2 – ARTISTIC BACKGROUND
+  ═══════════════════════════════════════════ -->
+  <section class="section background-section" id="background">
+    <div class="section-inner">
+      <div class="section-label reveal-item">02 / Artistic Background</div>
+      <h2 class="section-title reveal-item">
+        My Artistic <em>Journey</em>
+      </h2>
+
+      <div class="background-content">
+        <!-- Talents -->
+        <div class="bg-column reveal-item" style="--delay: 0.1s">
+          <div class="bg-card">
+            <div class="bg-card-icon">🎸</div>
+            <h3 class="bg-card-title">Guitar</h3>
+            <p class="bg-card-text">
+              The guitar was my first love — an instrument that transformed a simple melody
+              into a story. I play both acoustic and electric, exploring genres from fingerstyle
+              classical to rock and pop. The versatility of the guitar lets me express every
+              emotion I feel, from quiet introspection to powerful energy.
+            </p>
+            <div class="skill-bar-wrap">
+              <span class="skill-label">Proficiency</span>
+              <div class="skill-bar" data-level="82">
+                <div class="skill-bar-fill"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Piano -->
+        <div class="bg-column reveal-item" style="--delay: 0.2s">
+          <div class="bg-card">
+            <div class="bg-card-icon">🎹</div>
+            <h3 class="bg-card-title">Piano</h3>
+            <p class="bg-card-text">
+              The piano is my second artistic language. Its ability to produce both melody and
+              harmony simultaneously fascinates me. Through the piano, I explore classical pieces,
+              contemporary ballads, and improvisational jazz. Each key press is an intentional
+              decision, a brushstroke of sound.
+            </p>
+            <div class="skill-bar-wrap">
+              <span class="skill-label">Proficiency</span>
+              <div class="skill-bar" data-level="75">
+                <div class="skill-bar-fill"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Influences -->
+        <div class="bg-column reveal-item" style="--delay: 0.3s">
+          <div class="bg-card">
+            <div class="bg-card-icon">✨</div>
+            <h3 class="bg-card-title">Influences & Interests</h3>
+            <p class="bg-card-text">
+              My musical inspirations span across genres and eras. I draw from the mastery of
+              classical composers, the emotional depth of modern artists, and the raw energy
+              of rock legends. Beyond music, I find inspiration in cinema soundtracks, nature,
+              and everyday human experiences that beg to be translated into melody.
+            </p>
+            <div class="tags-wrap">
+              <span class="tag">Classical</span>
+              <span class="tag">Rock</span>
+              <span class="tag">Fingerstyle</span>
+              <span class="tag">Jazz</span>
+              <span class="tag">Ballads</span>
+              <span class="tag">Soundtrack</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Large decorative staff lines -->
+    <div class="staff-lines" aria-hidden="true">
+      <div class="staff-line"></div>
+      <div class="staff-line"></div>
+      <div class="staff-line"></div>
+      <div class="staff-line"></div>
+      <div class="staff-line"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 3 – VIDEO PERFORMANCE
+  ═══════════════════════════════════════════ -->
+  <section class="section video-section" id="video">
+    <div class="section-inner">
+      <div class="section-label reveal-item">03 / Performance</div>
+      <h2 class="section-title reveal-item">
+        Watch Me <em>Play</em>
+      </h2>
+      <p class="section-desc reveal-item">
+        This is a window into my musical world — raw, honest, and full of passion.
+      </p>
+
+      <div class="video-container reveal-item" id="video-container">
+        <div class="video-frame-glow"></div>
+        <iframe
+          id="main-video"
+          src="https://www.youtube.com/embed/acUXoNluMrI"
+          title="Jhulian – Do Better Live Guitar Performance"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+          style="width:100%;height:100%;border-radius:18px;position:relative;z-index:2;"
+        ></iframe>
+
+        <div class="video-caption">
+          <span class="video-caption-icon">♪</span>
+          <span>Do Better — Live Guitar Performance</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decorative piano roll -->
+    <div class="piano-roll-deco" aria-hidden="true">
+      <div class="roll-note" style="--col:1;--h:60px;--top:20%"></div>
+      <div class="roll-note" style="--col:2;--h:40px;--top:40%"></div>
+      <div class="roll-note" style="--col:3;--h:80px;--top:10%"></div>
+      <div class="roll-note" style="--col:4;--h:50px;--top:55%"></div>
+      <div class="roll-note" style="--col:5;--h:70px;--top:30%"></div>
+      <div class="roll-note" style="--col:6;--h:45px;--top:65%"></div>
+      <div class="roll-note" style="--col:7;--h:90px;--top:5%"></div>
+      <div class="roll-note" style="--col:8;--h:35px;--top:45%"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 4 – PHOTO GALLERY
+  ═══════════════════════════════════════════ -->
+  <section class="section gallery-section" id="gallery">
+    <div class="section-inner">
+      <div class="section-label reveal-item">04 / Gallery</div>
+      <h2 class="section-title reveal-item">
+        Captured <em>Moments</em>
+      </h2>
+      <p class="section-desc reveal-item">
+        Three windows into my artistic world — moments frozen in time.
+      </p>
+
+      <div class="gallery-grid">
+        <div class="gallery-item reveal-item" style="--delay:0.1s" id="gallery-1">
+          <div class="gallery-img-wrap">
+            <img src="music_photo1.png" alt="Jhulian playing guitar – artistic performance portrait" class="gallery-img" />
+            <div class="gallery-overlay">
+              <div class="gallery-overlay-content">
+                <span class="gallery-num">01</span>
+                <p class="gallery-caption">Guitar Performance</p>
+              </div>
+            </div>
+          </div>
+          <div class="gallery-info">
+            <h4>Guitar Performance</h4>
+            <p>Acoustic session capturing the emotional depth of my guitar playing.</p>
+          </div>
+        </div>
+
+        <div class="gallery-item reveal-item" style="--delay:0.2s" id="gallery-2">
+          <div class="gallery-img-wrap">
+            <img src="music_photo2.png" alt="Jhulian playing piano – hands on keys" class="gallery-img" />
+            <div class="gallery-overlay">
+              <div class="gallery-overlay-content">
+                <span class="gallery-num">02</span>
+                <p class="gallery-caption">Piano Study</p>
+              </div>
+            </div>
+          </div>
+          <div class="gallery-info">
+            <h4>Piano Study</h4>
+            <p>The piano keys tell a story — every note a deliberate brushstroke.</p>
+          </div>
+        </div>
+
+        <div class="gallery-item reveal-item" style="--delay:0.3s" id="gallery-3">
+          <div class="gallery-img-wrap">
+            <img src="music_photo3.png" alt="Acoustic guitar still life – artistic composition" class="gallery-img" />
+            <div class="gallery-overlay">
+              <div class="gallery-overlay-content">
+                <span class="gallery-num">03</span>
+                <p class="gallery-caption">The Instrument</p>
+              </div>
+            </div>
+          </div>
+          <div class="gallery-info">
+            <h4>The Instrument</h4>
+            <p>My guitar — a companion in every creative journey I embark on.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ Video Gallery ══ -->
+      <div class="section-label reveal-item" style="margin-top:4rem;">04b / More Performances</div>
+      <h3 class="section-subtitle reveal-item">More <em>Recordings</em></h3>
+
+      <div class="video-gallery-grid">
+
+        <div class="vg-card reveal-item" style="--delay:0.1s">
+          <div class="vg-video-wrap">
+            <iframe
+              src="https://www.youtube.com/embed/WQx5ct-38oM"
+              title="Love Is A Day – Jhulian Piano"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <div class="vg-info">
+            <span class="vg-badge">🎹 Piano</span>
+            <h4>Love Is A Day</h4>
+            <p>An expressive piano piece that breathes emotion through every phrase.</p>
+          </div>
+        </div>
+
+        <div class="vg-card reveal-item" style="--delay:0.2s">
+          <div class="vg-video-wrap">
+            <iframe
+              src="https://www.youtube.com/embed/Si2pEYJELJk"
+              title="Canción al Piano I – Jhulian"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <div class="vg-info">
+            <span class="vg-badge">🎹 Piano</span>
+            <h4>Canción al Piano I</h4>
+            <p>Original composition exploring the quiet beauty of solo piano.</p>
+          </div>
+        </div>
+
+        <div class="vg-card reveal-item" style="--delay:0.3s">
+          <div class="vg-video-wrap">
+            <iframe
+              src="https://www.youtube.com/embed/gw-wfjVWyL8"
+              title="Canción al Piano II – Jhulian"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <div class="vg-info">
+            <span class="vg-badge">🎹 Piano</span>
+            <h4>Canción al Piano II</h4>
+            <p>A continuation — deeper, more introspective, and harmonically rich.</p>
+          </div>
+        </div>
+
+        <div class="vg-card reveal-item" style="--delay:0.4s">
+          <div class="vg-video-wrap">
+            <iframe
+              src="https://www.youtube.com/embed/QMAWqZv7LEI"
+              title="Between – Jhulian Live Session"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <div class="vg-info">
+            <span class="vg-badge">🎵 Performance</span>
+            <h4>Between — Live Session</h4>
+            <p>A raw, unfiltered live session that showcases my artistic voice in full.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 5 – BILINGUALISM NOTE
+  ═══════════════════════════════════════════ -->
+  <section class="section bilingual-section" id="bilingual">
+    <div class="section-inner">
+      <div class="bilingual-banner reveal-item">
+        <div class="bilingual-icon">🌐</div>
+        <div class="bilingual-text">
+          <h3>Written in English</h3>
+          <p>
+            This portfolio is presented entirely in English, demonstrating bilingual communication skills
+            through clear ideas, proper punctuation, and the use of appropriate connectors throughout
+            all sections.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 6 – ARTISTIC REFERENCES
+  ═══════════════════════════════════════════ -->
+  <section class="section references-section" id="references">
+    <div class="section-inner">
+      <div class="section-label reveal-item">06 / Artistic References</div>
+      <h2 class="section-title reveal-item">
+        Those Who <em>Inspire</em> Me
+      </h2>
+      <p class="section-desc reveal-item">
+        Every artist stands on the shoulders of those who came before. These are the musicians and
+        creators who shaped my artistic voice.
+      </p>
+
+      <div class="references-grid">
+
+        <div class="ref-card reveal-item" style="--delay:0.1s" id="ref-1">
+          <div class="ref-card-top">
+            <div class="ref-glyph">🎸</div>
+            <div class="ref-info">
+              <h4 class="ref-name">John Mayer</h4>
+              <span class="ref-genre">Blues / Pop / Rock</span>
+            </div>
+          </div>
+          <p class="ref-desc">
+            A guitar virtuoso whose soulful playing blurs the lines between genres.
+            His blues-influenced fingerstyle work deeply inspired my approach to the guitar.
+          </p>
+        </div>
+
+        <div class="ref-card reveal-item" style="--delay:0.2s" id="ref-2">
+          <div class="ref-card-top">
+            <div class="ref-glyph">🎹</div>
+            <div class="ref-info">
+              <h4 class="ref-name">Ludwig van Beethoven</h4>
+              <span class="ref-genre">Classical</span>
+            </div>
+          </div>
+          <p class="ref-desc">
+            The titan of classical piano composition. Beethoven's Moonlight Sonata was the
+            first piece that made me understand music as pure emotional architecture.
+          </p>
+        </div>
+
+        <div class="ref-card reveal-item" style="--delay:0.3s" id="ref-3">
+          <div class="ref-card-top">
+            <div class="ref-glyph">🎵</div>
+            <div class="ref-info">
+              <h4 class="ref-name">Hans Zimmer</h4>
+              <span class="ref-genre">Film Score / Orchestral</span>
+            </div>
+          </div>
+          <p class="ref-desc">
+            The master of cinematic soundscapes. Zimmer proves that music can paint vivid images
+            without a single word — an inspiration for how I approach musical storytelling.
+          </p>
+        </div>
+
+        <div class="ref-card reveal-item" style="--delay:0.4s" id="ref-4">
+          <div class="ref-card-top">
+            <div class="ref-glyph">🎸</div>
+            <div class="ref-info">
+              <h4 class="ref-name">Tommy Emmanuel</h4>
+              <span class="ref-genre">Fingerstyle / Acoustic</span>
+            </div>
+          </div>
+          <p class="ref-desc">
+            Watching Tommy play guitar feels like witnessing a full orchestra in a single instrument.
+            His fingerstyle techniques transformed how I see the acoustic guitar's potential.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════ -->
+  <footer class="footer" id="footer">
+    <div class="footer-inner">
+      <div class="footer-wave-deco" aria-hidden="true">
+        <svg viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,40 C200,80 400,0 600,40 C800,80 1000,0 1200,40 L1200,80 L0,80 Z" fill="rgba(245,200,66,0.05)"/>
+        </svg>
+      </div>
+      <div class="footer-logo">♪</div>
+      <h3 class="footer-name">Jhulian</h3>
+      <p class="footer-tagline">Where silence becomes melody.</p>
+      <div class="footer-instruments">
+        <span>🎸 Guitar</span>
+        <span class="footer-dot">·</span>
+        <span>🎹 Piano</span>
+      </div>
+      <div class="footer-divider"></div>
+      <p class="footer-credit">
+        Artistic Portfolio · Arts Area 2025 · Visual Arts, Dance &amp; Music
+      </p>
+      <p class="footer-copy">Made with <span class="heart">♥</span> and a lot of music · Jhulian 2025</p>
+    </div>
+  </footer>
+
+  <!-- Lightbox for gallery -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close">✕</button>
+    <img class="lightbox-img" id="lightbox-img" src="" alt="" />
+    <p class="lightbox-caption" id="lightbox-caption"></p>
+  </div>
+
+  <!-- 🎛️ Floating Controls (Theme & Ambient Player) -->
+  <div class="floating-controls">
+    <button class="control-btn theme-toggle" id="theme-toggle" aria-label="Toggle Acoustic/Electric Theme">
+      <span class="theme-icon electric">⚡</span>
+      <span class="theme-icon acoustic">🪵</span>
+    </button>
+    <button class="control-btn ambient-toggle" id="ambient-toggle" aria-label="Play Ambient Music">
+      <span class="play-icon">▶</span>
+      <span class="pause-icon">⏸</span>
+    </button>
+  </div>
+
+  <!-- 🔉 Audio Elements -->
+  <!-- Ambient track (public domain classical guitar or piano placeholder) -->
+  <audio id="ambient-audio" loop preload="none">
+    <source src="https://cdn.pixabay.com/download/audio/2022/02/10/audio_fc862175de.mp3?filename=acoustic-guitars-playing-arpeggios-14332.mp3" type="audio/mpeg">
+  </audio>
+  
+
+
+  <script src="script.js"></script>
+</body>
+</html>
