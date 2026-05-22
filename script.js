@@ -385,53 +385,107 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --- YouTube iframe duck logic (pause/mute ambient when YT plays) ---
-  // We poll the YT iframes' state using the postMessage API
   const ytIframes = document.querySelectorAll('iframe[src*="youtube.com/embed"]');
+  const players = [];
+  let fadeInterval = null;
 
-  // Add enablejsapi=1 to each iframe src so we can receive events
+  // Add enablejsapi=1 to each iframe src so we can register to YT Events
   ytIframes.forEach(iframe => {
-    const url = new URL(iframe.src);
-    url.searchParams.set('enablejsapi', '1');
-    url.searchParams.set('origin', window.location.origin || '*');
-    iframe.src = url.toString();
-  });
-
-  window.addEventListener('message', (event) => {
-    // YouTube sends JSON strings
-    let data;
-    try { data = JSON.parse(event.data); } catch { return; }
-
-    // YT player state: 1 = playing, 2 = paused, 0 = ended
-    if (data.event === 'infoDelivery' && data.info && typeof data.info.playerState !== 'undefined') {
-      const state = data.info.playerState;
-      if (state === 1) {
-        // Video is playing → duck the music
-        if (!ambientAudio.paused) {
-          ducked = true;
-          // Smooth fade out over 500ms
-          const fadeOut = setInterval(() => {
-            if (ambientAudio.volume > 0.02) {
-              ambientAudio.volume = Math.max(0, ambientAudio.volume - 0.05);
-            } else {
-              ambientAudio.volume = 0;
-              clearInterval(fadeOut);
-            }
-          }, 25);
-        }
-      } else if (state === 2 || state === 0) {
-        // Video paused or ended → restore music volume
-        ducked = false;
-        const fadeIn = setInterval(() => {
-          if (ambientAudio.volume < userVolume - 0.02) {
-            ambientAudio.volume = Math.min(userVolume, ambientAudio.volume + 0.05);
-          } else {
-            ambientAudio.volume = userVolume;
-            clearInterval(fadeIn);
-          }
-        }, 25);
-      }
+    try {
+      const url = new URL(iframe.src);
+      url.searchParams.set('enablejsapi', '1');
+      iframe.src = url.toString();
+    } catch (e) {
+      console.warn("Failed to set enablejsapi on iframe:", iframe, e);
     }
   });
+
+  // Global callback that YouTube Player API triggers
+  window.onYouTubeIframeAPIReady = function() {
+    ytIframes.forEach(iframe => {
+      try {
+        const player = new YT.Player(iframe, {
+          events: {
+            'onStateChange': onPlayerStateChange
+          }
+        });
+        players.push(player);
+      } catch (err) {
+        console.error("Error creating YT.Player:", err);
+      }
+    });
+  };
+
+  function onPlayerStateChange(event) {
+    // YT.PlayerState: 1 = playing, 2 = paused, 0 = ended, 3 = buffering
+    const state = event.data;
+
+    // Check if any player is currently playing
+    const anyVideoPlaying = players.some(p => {
+      try {
+        return p && typeof p.getPlayerState === 'function' && p.getPlayerState() === 1;
+      } catch (e) {
+        return false;
+      }
+    }) || (state === 1);
+
+    if (anyVideoPlaying) {
+      // If a video is playing, fade out the background music to 0
+      if (!ducked) {
+        ducked = true;
+        fadeMusic(0, 500);
+      }
+    } else {
+      // Check if all players are stopped/paused/ended
+      const allStopped = players.every(p => {
+        try {
+          if (p && typeof p.getPlayerState === 'function') {
+            const s = p.getPlayerState();
+            return s !== 1 && s !== 3; // not playing and not buffering
+          }
+        } catch (e) {}
+        return true;
+      });
+
+      if (allStopped && state !== 1 && state !== 3) {
+        if (ducked) {
+          ducked = false;
+          // Fade background music back to the user's volume
+          fadeMusic(userVolume, 500);
+        }
+      }
+    }
+  }
+
+  function fadeMusic(targetVolume, duration = 500) {
+    if (fadeInterval) {
+      clearInterval(fadeInterval);
+    }
+
+    const startVolume = ambientAudio.volume;
+    const volumeDifference = targetVolume - startVolume;
+    const intervalTime = 25; // 25ms steps
+    const steps = duration / intervalTime;
+    let currentStep = 0;
+
+    fadeInterval = setInterval(() => {
+      currentStep++;
+      const nextVolume = startVolume + (volumeDifference * (currentStep / steps));
+      ambientAudio.volume = Math.max(0, Math.min(1, nextVolume));
+
+      if (currentStep >= steps) {
+        ambientAudio.volume = targetVolume;
+        clearInterval(fadeInterval);
+        fadeInterval = null;
+      }
+    }, intervalTime);
+  }
+
+  // Load the YouTube Iframe Player API script dynamically
+  const tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/iframe_api";
+  const firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 
   // --- 13. Interactive Piano Keyboard ---
