@@ -621,24 +621,38 @@
     <p class="lightbox-caption" id="lightbox-caption"></p>
   </div>
 
-  <!-- 🎛️ Floating Controls (Theme & Ambient Player) -->
+  <!-- 🎛️ Floating Controls (Theme & Mini Music Player) -->
   <div class="floating-controls">
+
+    <!-- Theme toggle -->
     <button class="control-btn theme-toggle" id="theme-toggle" aria-label="Toggle Acoustic/Electric Theme">
       <span class="theme-icon electric">⚡</span>
       <span class="theme-icon acoustic">🪵</span>
     </button>
-    <button class="control-btn ambient-toggle" id="ambient-toggle" aria-label="Play Ambient Music">
-      <span class="play-icon">▶</span>
-      <span class="pause-icon">⏸</span>
-    </button>
+
+    <!-- Mini music player -->
+    <div class="mini-player" id="mini-player">
+      <div class="mp-track-info">
+        <div class="mp-note">♫</div>
+        <div class="mp-title" id="mp-title">Jazz Chill</div>
+      </div>
+      <div class="mp-controls">
+        <button class="mp-btn" id="mp-prev" aria-label="Previous track">⏮</button>
+        <button class="mp-btn mp-play" id="mp-play" aria-label="Play/Pause">▶</button>
+        <button class="mp-btn" id="mp-next" aria-label="Next track">⏭</button>
+      </div>
+      <div class="mp-volume-row">
+        <span class="mp-vol-icon">🔊</span>
+        <input type="range" id="mp-volume" class="mp-volume-slider"
+               min="0" max="1" step="0.01" value="0.4"
+               aria-label="Volume">
+      </div>
+    </div>
+
   </div>
 
-  <!-- 🔉 Audio Elements -->
-  <!-- Ambient track (public domain classical guitar or piano placeholder) -->
-  <audio id="ambient-audio" loop preload="none">
-    <source src="https://cdn.pixabay.com/download/audio/2022/02/10/audio_fc862175de.mp3?filename=acoustic-guitars-playing-arpeggios-14332.mp3" type="audio/mpeg">
-  </audio>
-  
+  <!-- 🔉 Audio Element (src swapped via JS) -->
+  <audio id="ambient-audio" preload="none"></audio>
 
 
   <script src="script.js"></script>

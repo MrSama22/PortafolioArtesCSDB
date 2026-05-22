@@ -318,21 +318,121 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- 12. Ambient Player Logic ---
-  const ambientToggle = document.getElementById('ambient-toggle');
-  const ambientAudio = document.getElementById('ambient-audio');
-  if (ambientToggle && ambientAudio) {
-    ambientAudio.volume = 0.4;
-    ambientToggle.addEventListener('click', () => {
+  // --- 12. Mini Music Player ---
+  const playlist = [
+    { title: 'Lofi Chill',         src: 'nastelbom-lofi-chill-372954.mp3' },
+    { title: 'Jazz Café',          src: 'waveloom-jazz-cafe-516774.mp3' },
+    { title: 'Jazz No Copyright',  src: 'waveloom-music-no-copyright-jazz-516761.mp3' },
+    { title: 'Jazz Elegant',       src: 'waveloom-no-copyright-jazz-elegant-525518.mp3' },
+  ];
+
+  const ambientAudio  = document.getElementById('ambient-audio');
+  const mpPlay        = document.getElementById('mp-play');
+  const mpPrev        = document.getElementById('mp-prev');
+  const mpNext        = document.getElementById('mp-next');
+  const mpTitle       = document.getElementById('mp-title');
+  const mpVolume      = document.getElementById('mp-volume');
+
+  let currentTrack  = 0;
+  let userVolume    = 0.4;   // volume saved by user
+  let ducked        = false; // true while a YT video is playing
+
+  function loadTrack(index, autoplay = false) {
+    currentTrack = (index + playlist.length) % playlist.length;
+    ambientAudio.src = playlist[currentTrack].src;
+    ambientAudio.loop = true;
+    mpTitle.textContent = playlist[currentTrack].title;
+    if (autoplay) {
+      ambientAudio.play().catch(() => {});
+      mpPlay.classList.add('playing');
+      mpPlay.textContent = '⏸';
+    }
+  }
+
+  function setVolume(v) {
+    userVolume = v;
+    ambientAudio.volume = ducked ? 0 : v;
+    if (mpVolume) mpVolume.value = v;
+  }
+
+  // Init first track without playing
+  loadTrack(0, false);
+  ambientAudio.volume = userVolume;
+
+  if (mpPlay) {
+    mpPlay.addEventListener('click', () => {
       if (ambientAudio.paused) {
         ambientAudio.play().catch(() => {});
-        ambientToggle.classList.add('playing');
+        mpPlay.classList.add('playing');
+        mpPlay.textContent = '⏸';
       } else {
         ambientAudio.pause();
-        ambientToggle.classList.remove('playing');
+        mpPlay.classList.remove('playing');
+        mpPlay.textContent = '▶';
       }
     });
   }
+
+  if (mpPrev) mpPrev.addEventListener('click', () => loadTrack(currentTrack - 1, !ambientAudio.paused));
+  if (mpNext) mpNext.addEventListener('click', () => loadTrack(currentTrack + 1, !ambientAudio.paused));
+
+  // Auto-advance to next track when one ends
+  ambientAudio.addEventListener('ended', () => loadTrack(currentTrack + 1, true));
+
+  // Volume slider
+  if (mpVolume) {
+    mpVolume.addEventListener('input', () => setVolume(parseFloat(mpVolume.value)));
+  }
+
+  // --- YouTube iframe duck logic (pause/mute ambient when YT plays) ---
+  // We poll the YT iframes' state using the postMessage API
+  const ytIframes = document.querySelectorAll('iframe[src*="youtube.com/embed"]');
+
+  // Add enablejsapi=1 to each iframe src so we can receive events
+  ytIframes.forEach(iframe => {
+    const url = new URL(iframe.src);
+    url.searchParams.set('enablejsapi', '1');
+    url.searchParams.set('origin', window.location.origin || '*');
+    iframe.src = url.toString();
+  });
+
+  window.addEventListener('message', (event) => {
+    // YouTube sends JSON strings
+    let data;
+    try { data = JSON.parse(event.data); } catch { return; }
+
+    // YT player state: 1 = playing, 2 = paused, 0 = ended
+    if (data.event === 'infoDelivery' && data.info && typeof data.info.playerState !== 'undefined') {
+      const state = data.info.playerState;
+      if (state === 1) {
+        // Video is playing → duck the music
+        if (!ambientAudio.paused) {
+          ducked = true;
+          // Smooth fade out over 500ms
+          const fadeOut = setInterval(() => {
+            if (ambientAudio.volume > 0.02) {
+              ambientAudio.volume = Math.max(0, ambientAudio.volume - 0.05);
+            } else {
+              ambientAudio.volume = 0;
+              clearInterval(fadeOut);
+            }
+          }, 25);
+        }
+      } else if (state === 2 || state === 0) {
+        // Video paused or ended → restore music volume
+        ducked = false;
+        const fadeIn = setInterval(() => {
+          if (ambientAudio.volume < userVolume - 0.02) {
+            ambientAudio.volume = Math.min(userVolume, ambientAudio.volume + 0.05);
+          } else {
+            ambientAudio.volume = userVolume;
+            clearInterval(fadeIn);
+          }
+        }, 25);
+      }
+    }
+  });
+
 
   // --- 13. Interactive Piano Keyboard ---
   const pianoContainer = document.getElementById('piano-keys');
